@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>STOK Online Showroom — preview</title>
+<style>
+  :root{
+    /* STOK Emballage — navy + limegrøn */
+    --stok:#143a5f; --stok-dark:#0e2c49;
+    --green:#8cc540; --green-deep:#4f7a18;
+    --ink:#1e2a35; --slate:#5b6a77;
+    --mist:#f2f6f9; --line:#e3e9ee;
+    --font:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;border-top:4px solid var(--green)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  .banner{background:#fffbe6;border-bottom:1px solid #f4e39a;color:#7a5c00;font-size:13px;text-align:center;padding:8px 16px}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .hdr{height:64px;display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:12px;cursor:pointer}
+  .logobox{display:flex;align-items:center}
+  .brandlogo{height:40px;width:auto;display:block}
+  .logo .showroom{font-size:14px;font-weight:600;color:var(--slate)}
+  @media(max-width:520px){.logo .showroom{display:none}}
+  .cart-btn{position:relative;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:6px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;background:#fff}
+  .cart-btn:hover{background:var(--mist)}
+  .badge{display:inline-flex;height:20px;min-width:20px;align-items:center;justify-content:center;border-radius:999px;background:var(--stok);color:#fff;font-size:12px;font-weight:700;padding:0 6px}
+
+  /* Buttons */
+  .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:6px;background:var(--stok);color:#fff;font-size:16px;font-weight:600;padding:12px 24px;cursor:pointer;transition:background .15s}
+  .btn-primary:hover{background:var(--stok-dark)}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+  .btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font-size:16px;font-weight:600;padding:12px 24px;cursor:pointer}
+  .btn-secondary:hover{background:var(--mist)}
+
+  /* Hero */
+  .hero{background:linear-gradient(180deg,#ffffff 0%,var(--mist) 100%);border-bottom:1px solid var(--line)}
+  .hero h1{position:relative;padding-bottom:16px}
+  .hero h1::after{content:"";position:absolute;left:0;bottom:0;width:64px;height:4px;border-radius:2px;background:var(--green)}
+  .hero .wrap{padding:64px 24px}
+  .eyebrow{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--green-deep)}
+  h1{font-size:44px;line-height:1.1;font-weight:800;letter-spacing:-.02em;margin:12px 0 0;max-width:640px}
+  .hero p{font-size:18px;color:var(--slate);max-width:560px;margin-top:16px}
+
+  /* Filters + grid */
+  section.body{padding:48px 24px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);background:#fff;color:var(--slate);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer}
+  .chip:hover{border-color:var(--stok);color:var(--stok)}
+  .chip.active{background:var(--green);border-color:var(--green);color:var(--stok);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .count{margin-top:16px;font-size:14px;color:var(--slate)}
+  .grid{margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}h1{font-size:34px}.hero .wrap{padding:48px 24px}}
+
+  .card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;transition:box-shadow .2s}
+  .card:hover{box-shadow:0 10px 25px -5px rgba(0,0,0,.12)}
+  .thumb{aspect-ratio:4/3;position:relative;overflow:hidden;background:var(--mist)}
+  .thumb svg{width:100%;height:100%;display:block;transition:transform .3s}
+  .card:hover .thumb svg{transform:scale(1.05)}
+  .card .pad{padding:20px;display:flex;flex-direction:column;flex:1}
+  .cat{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--green-deep)}
+  .card h3{margin:4px 0 0;font-size:18px}
+  .card .desc{margin:8px 0 0;font-size:14px;color:var(--slate);flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .more{margin-top:16px;font-size:14px;font-weight:600;color:var(--stok);display:inline-flex;align-items:center;gap:4px}
+  .card:hover .more{color:var(--green-deep)}
+
+  /* Product detail */
+  .crumb{font-size:14px;color:var(--slate);margin-bottom:24px}
+  .crumb a{cursor:pointer}.crumb a:hover{color:var(--stok)}
+  .detail{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  @media(max-width:900px){.detail{grid-template-columns:1fr}}
+  .gallery .main{aspect-ratio:4/3;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--mist)}
+  .gallery .main svg{width:100%;height:100%}
+  .thumbs{display:flex;gap:12px;margin-top:12px}
+  .thumbs button{width:96px;height:80px;border:2px solid var(--line);border-radius:6px;overflow:hidden;padding:0;cursor:pointer;background:none}
+  .thumbs button.active{border-color:var(--stok)}
+  .thumbs svg{width:100%;height:100%;display:block}
+  h2.pt{font-size:34px;font-weight:800;letter-spacing:-.02em;margin:8px 0 0}
+  .detail .desc{font-size:18px;color:var(--slate);margin-top:16px}
+  .specs{margin-top:32px}
+  .specs h3{font-size:18px;margin:0 0 12px}
+  .specs ul{margin:0;padding:0;list-style:none;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .specs li{padding:12px 16px;font-size:14px;color:var(--slate);border-top:1px solid var(--line)}
+  .specs li:first-child{border-top:0}
+  .specs ul:empty{display:none}
+  .tier{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-top:8px;cursor:pointer;font-size:14px}
+  .tier:has(input:checked){border-color:var(--stok);background:var(--mist)}
+  .tier input{accent-color:var(--stok)}
+  .qctl select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:var(--font);max-width:100%}
+  .qtybox{margin-top:32px;border:1px solid var(--line);border-radius:8px;padding:20px}
+  .lbl{display:block;font-size:14px;font-weight:500;color:var(--slate);margin-bottom:8px}
+  .qtyrow{display:flex;align-items:center;gap:8px}
+  .qtyrow button{width:44px;height:44px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:20px;font-weight:700;cursor:pointer}
+  .qtyrow button:hover{background:var(--mist)}
+  .qtyrow button:disabled{opacity:.4;cursor:not-allowed}
+  input[type=number],input[type=text],input[type=email],input[type=tel],textarea{font-family:inherit;font-size:16px;border:1px solid var(--line);border-radius:6px;padding:8px 12px;color:var(--ink);outline:none;width:100%}
+  input:focus,textarea:focus{border-color:var(--stok);box-shadow:0 0 0 1px var(--stok)}
+  .qtyrow input{width:96px;text-align:center}
+  .added{margin-top:12px;font-size:14px;color:#15803d;font-weight:500}
+
+  /* Quote list */
+  .quote-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;margin-top:32px}
+  @media(max-width:900px){.quote-grid{grid-template-columns:1fr}}
+  .qlist{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .qitem{display:flex;gap:16px;padding:16px;border-top:1px solid var(--line)}
+  .qitem:first-child{border-top:0}
+  .qitem .qthumb{width:96px;height:80px;border-radius:6px;overflow:hidden;flex-shrink:0;background:var(--mist)}
+  .qitem .qthumb svg{width:100%;height:100%}
+  .qitem .info{flex:1;display:flex;flex-direction:column}
+  .qitem .info .nm{font-weight:600;cursor:pointer}
+  .qitem .info .nm:hover{color:var(--stok)}
+  .qitem .info .c{font-size:14px;color:var(--slate)}
+  .qctl{margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:8px}
+  .qctl input{width:96px}
+  .qctl .min{font-size:12px;color:var(--slate)}
+  .remove{margin-left:auto;font-size:14px;font-weight:500;color:var(--stok);background:none;border:0;cursor:pointer}
+  form.card2{border:1px solid var(--line);border-radius:8px;padding:24px}
+  form.card2 h2{font-size:20px;margin:0 0 16px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:14px;font-weight:500;color:var(--slate);margin-bottom:4px}
+  .priv{margin-top:16px;font-size:12px;color:var(--slate)}
+  .priv a{color:var(--stok);text-decoration:underline}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .empty{text-align:center;padding:64px 24px}
+  .empty h1{margin:0 auto}
+
+  /* Confirmation */
+  .thanks{max-width:640px;margin:0 auto;padding:64px 24px}
+  .thanks .box{border:1px solid var(--line);border-radius:8px;padding:32px;text-align:center}
+  .check{width:56px;height:56px;border-radius:999px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto}
+  .summary{border:1px solid var(--line);border-radius:8px;padding:24px;margin-top:32px;text-align:left}
+  .summary table{width:100%;border-collapse:collapse;font-size:14px;margin-top:16px}
+  .summary th,.summary td{text-align:left;padding:8px 0;border-bottom:1px solid var(--line)}
+  .summary td.r,.summary th.r{text-align:right}
+  .dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px;margin-top:16px}
+  .dl dt{color:var(--slate)}.dl dd{margin:0;font-weight:500}
+
+  footer{margin-top:80px;border-top:1px solid var(--line);background:var(--mist)}
+  footer .wrap{padding:40px 24px}
+  .foot-top{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
+  footer p.lead{font-size:18px;font-weight:700;margin:0}
+  footer .sub{font-size:14px;color:var(--slate);max-width:420px;margin-top:4px}
+  footer nav{display:flex;flex-direction:column;gap:8px;font-size:14px}
+  footer nav a{color:var(--slate);cursor:pointer}footer nav a:hover{color:var(--stok)}
+  footer .fine{margin-top:32px;font-size:12px;color:var(--slate)}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="banner">Interaktiv demo af STOK Online Showroom · Browse, vælg antal og prøv en tilbudsanmodning · Alt kører lokalt — ingen data sendes.</div>
+
+<header>
+  <div class="wrap hdr">
+    <div class="logo" onclick="go('home')">
+      <span class="logobox"><img class="brandlogo" src="data:image/png;base64,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" alt="STOK Emballage"></span>
+      <span class="showroom">Online Showroom</span>
+    </div>
+    <button class="cart-btn" onclick="go('quote')">
+      Tilbudsliste <span id="cartBadge" class="badge hidden">0</span>
+    </button>
+  </div>
+</header>
+
+<div id="app"></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <p class="lead">STOK Emballage</p>
+        <p class="sub">Displayløsninger i pap til detailhandlen. Browse showroomet, vælg dine modeller og send en uforpligtende tilbudsanmodning.</p>
+      </div>
+      <nav>
+        <a onclick="go('home')">Showroom</a>
+        <a onclick="go('quote')">Tilbudsliste</a>
+        <a href="https://www.stokdisplay.dk/" target="_blank" rel="noopener">stokdisplay.dk</a>
+        <a href="https://www.stokdisplay.dk/" target="_blank" rel="noopener">Persondatapolitik</a>
+      </nav>
+    </div>
+    <p class="fine">© <span id="yr"></span> STOK Display. Data indtastet i formularen bruges udelukkende til at udarbejde dit tilbud.</p>
+  </div>
+</footer>
+
+<script>
+const PRODUCTS = [
+  {id:"borddisplay-scangrip",navn:"Borddisplay – Scangrip",kategori:"Borddisplay",beskrivelse:"Borddisplay med topskilt og rummelig varebakke. Placeres på disk eller bord, hvor kunderne træffer beslutningen.",specifikationer:[],billede:"images/borddisplay-scangrip.jpg"},
+  {id:"dispenser-jyske-forsikring",navn:"Dispenser – Jyske Forsikring",kategori:"Borddisplay",beskrivelse:"Dispenser med konturskåret topskilt og udtagsbakke. Perfekt til flyers, giveaways eller produktprøver.",specifikationer:[],billede:"images/dispenser-jyske-forsikring.jpg"},
+  {id:"kvartpalle-kitkat-f1",navn:"KitKat F1 Display",kategori:"Kvartpalle display",beskrivelse:"Gulvstående kampagnedisplay med fem skrå varehylder, konturskåret topskilt og fuldt kampagnetryk. Produceret for Nestlé til KitKat F1-kampagnen.",specifikationer:[],billede:"images/kvartpalle-kitkat-f1.jpg"},
+  {id:"kvartpalle-balladefabrikken",navn:"Kvartpalledisplay – Ballade Fabrikken",kategori:"Kvartpalle display",beskrivelse:"Kvartpalledisplay med konturskåret front og topskilt. Stærk farvegengivelse der skaber festival-stemning i butikken.",specifikationer:[],billede:"images/kvartpalle-balladefabrikken.jpg"},
+  {id:"display-kitkat-christmas",navn:"Christmas Break Display – KitKat",kategori:"Kvartpalle display",beskrivelse:"Sæsondisplay med tre varehylder og konturskåret juletopper. Fuldt kampagnetryk på alle synlige flader.",specifikationer:[],billede:"images/display-kitkat-christmas.jpg"},
+  {id:"display-after-eight",navn:"Palledisplay – After Eight",kategori:"Kvartpalle display",beskrivelse:"Elegant hyldedisplay på pallefod med delt varerum og integreret sortimentsguide i midtersøjlen.",specifikationer:[],billede:"images/display-after-eight.jpg"},
+  {id:"kvartpalle-svoeb-hotwok",navn:"Kvartpalle svøb med topbakke – Hot Wok",kategori:"Kvartpalle svøb",beskrivelse:"Svøb til kvartpalle med integreret topbakke og topskilt. Hurtig kampagneeksponering uden ompakning af varer.",specifikationer:[],billede:"images/kvartpalle-svoeb-hotwok.jpg"},
+  {id:"kvartpalle-svoeb-starbucks",navn:"Kvartpalle svøb – Starbucks",kategori:"Kvartpalle svøb",beskrivelse:"Kvartpalle-svøb med højt topskilt og fuldt brandtryk. Fra palle til salgsklar eksponering på få minutter.",specifikationer:[],billede:"images/kvartpalle-svoeb-starbucks.jpg"},
+  {id:"tredjedel-svoeb-starbucks",navn:"Tredjedel europalle svøb – Starbucks",kategori:"Tredjedel display",beskrivelse:"Svøb i tredjedelsformat med kampagnetopskilt. Udnytter smalle placeringer ved kasselinje og gangarealer.",specifikationer:[],billede:"images/tredjedel-svoeb-starbucks.jpg"},
+  {id:"gulvdisplay-starbucks",navn:"Gulvdisplay – Starbucks",kategori:"Tredjedel display",beskrivelse:"Slankt gulvdisplay med fem hylder, sortimentsguide i toppen og fuldt brandtryk på alle sider.",specifikationer:[],billede:"images/gulvdisplay-starbucks.jpg"},
+  {id:"gulvdisplay-brogrund",navn:"Gulvdisplay – Brogrund",kategori:"Tredjedel display",beskrivelse:"Slankt tower-display med konturskårne hylderum og sidemonteret brochureholder. Minimalistisk og robust.",specifikationer:[],billede:"images/gulvdisplay-brogrund.jpg"},
+  {id:"display-skoenhedsprodukter",navn:"Display til skønhedsprodukter",kategori:"Tredjedel display",beskrivelse:"Højt display med hylder, kroge og spejlelement. Kombinerer flere eksponeringsformer i ét smalt fodaftryk.",specifikationer:[],billede:"images/display-skoenhedsprodukter.jpg"},
+  {id:"halvpalle-dumper-lego",navn:"Halvpalle dumper – LEGO",kategori:"Halvpalle display",beskrivelse:"Dumper i halvpalleformat med højt bagpanel og lentikulær 3D-effekt. Skabt til kampagner med stor volumen.",specifikationer:[],billede:"images/halvpalle-dumper-lego.jpg"},
+  {id:"halvpalle-svoeb-protox",navn:"Halvpalle svøb – Protox",kategori:"Halvpalle display",beskrivelse:"Svøb i halvpalleformat med informationstungt topskilt i naturpap. Klar til direkte placering i byggemarkedet.",specifikationer:[],billede:"images/halvpalle-svoeb-protox.jpg"},
+  {id:"halvpalle-svoeb-ish",navn:"Halvpalle svøb – ISH",kategori:"Halvpalle display",beskrivelse:"Halvpalle-svøb med konturskåret kampagnetopper og QR-integration til konkurrenceaktivering.",specifikationer:[],billede:"images/halvpalle-svoeb-ish.jpg"},
+  {id:"gulvdisplay-julekalender-groen",navn:"Palledisplay – Børnenes U-landskalender",kategori:"Halvpalle display",beskrivelse:"Trappeformet palledisplay med kroge, poseholdere og guldtryk. Premium-udtryk til sæsonsalg.",specifikationer:[],billede:"images/gulvdisplay-julekalender-groen.jpg"},
+  {id:"helpalle-blomster-lego",navn:"Helpalle blomsterdisplay – LEGO",kategori:"Helpalle display",beskrivelse:"Helpalledisplay formet som overdimensioneret klods med integrerede produktholdere i toppen. Maksimal stopeffekt.",specifikationer:[],billede:"images/helpalle-blomster-lego.jpg"},
+  {id:"gulvdisplay-solpleie-bakker",navn:"Gulvdisplay med bakker – Solpleie",kategori:"Kvartpalle display",beskrivelse:"Trappedisplay med fem dybe varebakker og udskifteligt topskilt. Alle produkter synlige fra gangzonen.",specifikationer:[],billede:"images/gulvdisplay-solpleie-bakker.jpg"},
+  {id:"gulvdisplay-randers-tegl",navn:"Gulvdisplay til tagsten – Randers Tegl",kategori:"Kvartpalle display",beskrivelse:"Forstærket display konstrueret til tunge byggematerialer, med prøvefremvisning og brochureholder.",specifikationer:[],billede:"images/gulvdisplay-randers-tegl.jpg"},
+  {id:"gulvdisplay-julekalender-blaa",navn:"Gulvdisplay – Børnenes U-landskalender",kategori:"Kvartpalle display",beskrivelse:"Dumper-display med stort konturskåret topskilt og fortællende kampagnetryk på alle flader.",specifikationer:[],billede:"images/gulvdisplay-julekalender-blaa.jpg"},
+  {id:"gulvdisplay-urtekram",navn:"Gulvdisplay – Urtekram",kategori:"Kvartpalle display",beskrivelse:"Gulvdisplay med seks rum og buet topskilt. Naturlige toner der matcher brandets udtryk.",specifikationer:[],billede:"images/gulvdisplay-urtekram.jpg"},
+  {id:"spyddisplay-eurocycle",navn:"Spyddisplay – Eurocycle",kategori:"Kvartpalle display",beskrivelse:"Spyddisplay med planogram-guide på sidepanelet og fleksibel krogopsætning til blisterpakkede varer.",specifikationer:[],billede:"images/spyddisplay-eurocycle.jpg"},
+  {id:"dumper-6-kant-bambusa",navn:"Dumper 6-kant – Bambusa",kategori:"POS Materiale",beskrivelse:"Sekskantet dumper med diskret branding og kontrastkant. Enkel montage og stor volumen.",specifikationer:[],billede:"images/dumper-6-kant-bambusa.jpg"},
+  {id:"dumper-6-kant-meny",navn:"Dumper 6-kant snoet – Meny",kategori:"POS Materiale",beskrivelse:"Sekskantet dumper i snoet to-sektions design. Skaber dynamik og synlighed midt i butiksgulvet.",specifikationer:[],billede:"images/dumper-6-kant-meny.jpg"},
+  {id:"brochureholder",navn:"Brochureholder",kategori:"POS Materiale",beskrivelse:"Brochureholder med staffeli-bagside til bord eller disk. Leveres flatpakket og samles uden værktøj.",specifikationer:[],billede:"images/brochureholder.jpg"},
+  {id:"bue-reboard-casino",navn:"Bue i Re-board – Casino",kategori:"POS Materiale",beskrivelse:"Fritstående portal-bue i Re-board. Skaber en fysisk indgang til kampagneområder og events.",specifikationer:[],billede:"images/bue-reboard-casino.jpg"},
+  {id:"gulvskilt-blockbuster",navn:"Gulvskilt – Blockbuster",kategori:"POS Materiale",beskrivelse:"Konturskåret gulvskilt med solid fod. Stor grafisk flade med maksimal genkendelighed.",specifikationer:[],billede:"images/gulvskilt-blockbuster.jpg"},
+  {id:"ellipse-svansoe-aioli",navn:"Ellipse-skilt – Svansø",kategori:"POS Materiale",beskrivelse:"Konturskåret produktskilt i 370 g Korsnäs-karton med påmonteret badge. Skarp gengivelse af emballagen i stort format.",specifikationer:[],billede:"images/ellipse-svansoe-aioli.jpg"},
+  {id:"ellipse-kitkat",navn:"Ellipse – KitKat",kategori:"POS Materiale",beskrivelse:"Konturskåret produktreplika i stort format. Tro kopi af emballagen med blank finish.",specifikationer:[],billede:"images/ellipse-kitkat.jpg"},
+  {id:"standee-lego",navn:"Standee – LEGO",kategori:"POS Materiale",beskrivelse:"Standee i stort format med tredimensionel figurfront og integreret basesokkel.",specifikationer:[],billede:"images/standee-lego.jpg"},
+  {id:"standee-panda-bambusa",navn:"Standee panda – Bambusa",kategori:"POS Materiale",beskrivelse:"Konturskåret maskot-standee med påmonterede elementer. Skaber personlighed omkring brandet.",specifikationer:[],billede:"images/standee-panda-bambusa.jpg"},
+  {id:"topskilt-ppd-outdoor",navn:"Topskilt – PPD Outdoor",kategori:"POS Materiale",beskrivelse:"Topskilt med gennemgående kategori-ikonografi og produktfotos. Monteres direkte på display eller reol.",specifikationer:[],billede:"images/topskilt-ppd-outdoor.jpg"},
+  {id:"podie-dolce-gusto",navn:"Podie – Nescafé Dolce Gusto",kategori:"POS Materiale",beskrivelse:"Podie med hylde og udskifteligt kampagnebagpanel til maskindemonstration og sæsonkampagner.",specifikationer:[],billede:"images/podie-dolce-gusto.jpg"},
+  {id:"sparegris-wuerth",navn:"Sparegris – Würth",kategori:"POS Materiale",beskrivelse:"Konturskåret sparegris i stort format med indkastfunktion. Til indsamlinger og interne kampagner.",specifikationer:[],billede:"images/sparegris-wuerth.jpg"},
+  {id:"strandhus-cabine-de-plage",navn:"Strandhuse – Cabine de Plage",kategori:"POS Materiale",beskrivelse:"Tre sammenbyggede strandhuse i fuld højde med funktionel dør. Rumskabende event- og butiksdekoration.",specifikationer:[],billede:"images/strandhus-cabine-de-plage.jpg"},
+  {id:"lastbil-nrgi-elcon",navn:"Lastbil – NRGi Elcon",kategori:"POS Materiale",beskrivelse:"Skær-i-form lastbil med fuldt firmatryk. Blikfang til messer, receptioner og kampagner.",specifikationer:[],billede:"images/lastbil-nrgi-elcon.jpg"},
+  {id:"lastbil-johannes-andersen",navn:"Lastbil – Johannes Andersen Transport",kategori:"POS Materiale",beskrivelse:"Detaljeret lastbilmodel i pap med tryk på alle flader. Tro kopi af firmaets egne køretøjer.",specifikationer:[],billede:"images/lastbil-johannes-andersen.jpg"},
+  {id:"lastbil-lotek",navn:"Varevogn – Lotek",kategori:"POS Materiale",beskrivelse:"Varevognsmodel i skær-i-form med fotorealistisk tryk. Stærk 3D-effekt fra alle vinkler.",specifikationer:[],billede:"images/lastbil-lotek.jpg"},
+  {id:"kube-friends",navn:"Kube – Friends",kategori:"POS Materiale",beskrivelse:"Fuldtrykt kube til stabling og blikfang. Print på alle seks sider giver frihed i opstillingen.",specifikationer:[],billede:"images/kube-friends.jpg"}
+];
+const CAT_COLOR = {"Borddisplay":["#1f5136","#173d29"],"Kvartpalle display":["#143a5f","#0e2c49"],"Kvartpalle svøb":["#0e2c49","#143a5f"],"Tredjedel display":["#1f5136","#173d29"],"Halvpalle display":["#143a5f","#0e2c49"],"Helpalle display":["#0e2c49","#143a5f"],"POS Materiale":["#1f5136","#173d29"]};
+const categories = ["Borddisplay","Kvartpalle display","Kvartpalle svøb","Tredjedel display","Halvpalle display","Helpalle display","POS Materiale"];
+
+// state
+const TIERS = ["1-50 stk. \u2014 digital trykte displays","+50 stk. \u2014 traditionel tryk og produktion"];
+let items = [];            // {id,navn,kategori,maengde}
+let activeFilter = "Alle";
+let lastSubmitted = null;
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function placeholder(p,idx){
+  const [c1,c2]=CAT_COLOR[p.kategori]||["#c8102e","#9e0c24"];
+  const bg = idx%2 ? c2 : c1;
+  return `<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="800" height="600" fill="${bg}"/>
+    <rect x="40" y="40" width="720" height="520" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="2" stroke-dasharray="10 8"/>
+    <path d="M330 200 A70 70 0 0 0 330 340" fill="none" stroke="#8cc540" stroke-width="16" stroke-linecap="round"/>
+    <path d="M470 200 A70 70 0 0 1 470 340" fill="none" stroke="#8cc540" stroke-width="16" stroke-linecap="round"/>
+    <text x="400" y="475" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="34" font-weight="700" fill="#fff">${esc(p.navn)}</text>
+    <text x="400" y="510" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#fff" fill-opacity=".8">Foto ${idx+1} · placeholder</text>
+  </svg>`;
+}
+function visual(p,idx){
+  if(p.billede) return `<img src="${p.billede}" alt="${esc(p.navn)}" style="width:100%;height:100%;object-fit:contain;background:#fff;display:block">`;
+  return placeholder(p,idx);
+}
+function totalItems(){return items.length}
+function refreshBadge(){
+  const b=document.getElementById("cartBadge");
+  if(totalItems()>0){b.textContent=totalItems();b.classList.remove("hidden")}else{b.classList.add("hidden")}
+}
+function addItem(p,maengde){
+  const ex=items.find(i=>i.id===p.id);
+  if(ex){ex.maengde=maengde}else{items.push({id:p.id,navn:p.navn,kategori:p.kategori,maengde})}
+  refreshBadge();
+}
+
+const app=document.getElementById("app");
+let route={name:"home"};
+function go(name,arg){route={name,arg};window.scrollTo(0,0);render();}
+
+function render(){
+  refreshBadge();
+  if(route.name==="home")return renderHome();
+  if(route.name==="product")return renderProduct(route.arg);
+  if(route.name==="quote")return renderQuote();
+  if(route.name==="thanks")return renderThanks();
+}
+
+function renderHome(){
+  const filters=["Alle",...categories];
+  const list=activeFilter==="Alle"?PRODUCTS:PRODUCTS.filter(p=>p.kategori===activeFilter);
+  app.innerHTML=`
+    <div class="hero"><div class="wrap">
+      <p class="eyebrow">Online Showroom</p>
+      <h1>Displayløsninger der sælger dine varer</h1>
+      <p>Udforsk vores bord-, palle- og displayløsninger samt POS-materiale. Vælg de modeller og antal du er interesseret i, og send en uforpligtende tilbudsanmodning.</p>
+    </div></div>
+    <section class="body"><div class="wrap">
+      <div class="chips">
+        ${filters.map(c=>`<button class="chip ${c===activeFilter?'active':''}" onclick="setFilter('${c}')">${c}</button>`).join("")}
+      </div>
+      <p class="count">${list.length} ${list.length===1?"produkt":"produkter"}</p>
+      <div class="grid">
+        ${list.map(p=>`
+          <div class="card" onclick="go('product','${p.id}')">
+            <div class="thumb">${visual(p,0)}</div>
+            <div class="pad">
+              <span class="cat">${p.kategori}</span>
+              <h3>${esc(p.navn)}</h3>
+              <p class="desc">${esc(p.beskrivelse)}</p>
+              <span class="more">Se detaljer →</span>
+            </div>
+          </div>`).join("")}
+      </div>
+    </div></section>`;
+}
+function setFilter(c){activeFilter=c;renderHome();}
+
+function renderProduct(id){
+  const p=PRODUCTS.find(x=>x.id===id); if(!p)return go("home");
+  let gi=0;
+  app.innerHTML=`
+    <section class="body"><div class="wrap">
+      <p class="crumb"><a onclick="go('home')">Showroom</a> / ${esc(p.navn)}</p>
+      <div class="detail">
+        <div class="gallery">
+          <div class="main" id="mainImg">${visual(p,0)}</div>
+          <div class="thumbs">
+            ${[0,1].map(i=>`<button class="${i===0?'active':''}" data-i="${i}">${visual(p,i)}</button>`).join("")}
+          </div>
+        </div>
+        <div>
+          <span class="cat">${p.kategori}</span>
+          <h2 class="pt">${esc(p.navn)}</h2>
+          <p class="desc">${esc(p.beskrivelse)}</p>
+          <div class="specs">
+            <h3>Specifikationer</h3>
+            <ul>${p.specifikationer.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>
+          </div>
+          <div class="qtybox">
+            <label class="lbl">Antal</label>
+            <label class="tier"><input type="radio" name="tier" value="${TIERS[0]}" checked><span><strong>1-50 stk.</strong> digital trykte displays</span></label>
+            <label class="tier"><input type="radio" name="tier" value="${TIERS[1]}"><span><strong>+50 stk.</strong> traditionel tryk og produktion</span></label>
+            <button class="btn-primary" style="width:100%;margin-top:16px" id="add">Tilføj til tilbudsliste</button>
+            <div id="addedMsg"></div>
+          </div>
+        </div>
+      </div>
+    </div></section>`;
+  document.querySelectorAll(".thumbs button").forEach(b=>b.onclick=()=>{
+    document.querySelectorAll(".thumbs button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    document.getElementById("mainImg").innerHTML=visual(p,+b.dataset.i);
+  });
+  document.getElementById("add").onclick=()=>{
+    addItem(p,document.querySelector('input[name="tier"]:checked').value);
+    document.getElementById("addedMsg").innerHTML=
+      `<p class="added">✓ Tilføjet til tilbudslisten</p>
+       <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="go('quote')">Gå til tilbudsliste</button>`;
+  };
+}
+
+function renderQuote(){
+  if(items.length===0){
+    app.innerHTML=`<section class="body"><div class="wrap empty">
+      <h1>Din tilbudsliste er tom</h1>
+      <p style="color:var(--slate);margin-top:12px">Find de displays du er interesseret i og tilføj dem til listen.</p>
+      <button class="btn-primary" style="margin-top:24px" onclick="go('home')">Til showroom</button>
+    </div></section>`;return;
+  }
+  app.innerHTML=`<section class="body"><div class="wrap">
+    <h1 style="font-size:34px">Tilbudsliste</h1>
+    <div class="quote-grid">
+      <div class="qlist">
+        ${items.map(it=>{const p=PRODUCTS.find(x=>x.id===it.id);return `
+          <div class="qitem">
+            <div class="qthumb">${visual(p,0)}</div>
+            <div class="info">
+              <span class="nm" onclick="go('product','${it.id}')">${esc(it.navn)}</span>
+              <span class="c">${it.kategori}</span>
+              <div class="qctl">
+                <select data-id="${it.id}" class="qi">
+                  ${TIERS.map(t=>`<option ${t===it.maengde?"selected":""}>${t}</option>`).join("")}
+                </select>
+                <button class="remove" data-id="${it.id}">Fjern</button>
+              </div>
+            </div>
+          </div>`}).join("")}
+      </div>
+      <div>
+        <form class="card2" id="quoteForm" novalidate>
+          <h2>Dine oplysninger</h2>
+          <div class="field"><label>Virksomhed *</label><input name="virksomhed" required></div>
+          <div class="field"><label>Kontaktperson *</label><input name="kontaktperson" required></div>
+          <div class="field"><label>E-mail *</label><input name="email" type="email" required></div>
+          <div class="field"><label>Telefon *</label><input name="telefon" type="tel" required></div>
+          <div class="field"><label>Besked (valgfri)</label><textarea name="besked" rows="4"></textarea></div>
+          <div class="hp" aria-hidden="true"><label>Website</label><input name="website" tabindex="-1" autocomplete="off"></div>
+          <div id="formErr"></div>
+          <button type="submit" class="btn-primary" style="width:100%;margin-top:8px">Send tilbudsanmodning</button>
+          <p class="priv">Dine oplysninger bruges udelukkende til at udarbejde dit tilbud og gemmes ikke ud over det. Læs mere i STOK's <a href="https://www.stokdisplay.dk/" target="_blank" rel="noopener">persondatapolitik</a>.</p>
+        </form>
+      </div>
+    </div>
+  </div></section>`;
+  document.querySelectorAll(".qi").forEach(inp=>inp.onchange=()=>{
+    const it=items.find(i=>i.id===inp.dataset.id);
+    it.maengde=inp.value;
+  });
+  document.querySelectorAll(".remove").forEach(btn=>btn.onclick=()=>{
+    items=items.filter(i=>i.id!==btn.dataset.id);renderQuote();
+  });
+  document.getElementById("quoteForm").onsubmit=e=>{
+    e.preventDefault();
+    const f=e.target, d=new FormData(f);
+    if(d.get("website")){go("thanks");return;} // honeypot: stille "ok"
+    const req=["virksomhed","kontaktperson","email","telefon"];
+    for(const k of req){if(!String(d.get(k)).trim()){document.getElementById("formErr").innerHTML=`<p style="color:#b91c1c;font-size:14px;margin:0 0 8px">Udfyld venligst alle påkrævede felter.</p>`;return;}}
+    lastSubmitted={
+      virksomhed:d.get("virksomhed"),kontaktperson:d.get("kontaktperson"),
+      email:d.get("email"),telefon:d.get("telefon"),besked:d.get("besked")||"",
+      linjer:items.map(i=>({navn:i.navn,maengde:i.maengde})),
+    };
+    items=[];
+    go("thanks");
+  };
+}
+
+function renderThanks(){
+  const s=lastSubmitted;
+  app.innerHTML=`<div class="thanks">
+    <div class="box">
+      <div class="check"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h1 style="font-size:30px;margin:20px 0 0">Tak for din anmodning</h1>
+      <p style="color:var(--slate);margin-top:12px">Vi har modtaget din tilbudsanmodning og vender tilbage hurtigst muligt.${s?` Du modtager en bekræftelse på <strong>${esc(s.email)}</strong>.`:""}</p>
+    </div>
+    ${s?`<div class="summary">
+      <h2 style="margin:0;font-size:18px">Opsummering</h2>
+      <div class="dl">
+        <div><dt>Virksomhed</dt><dd>${esc(s.virksomhed)}</dd></div>
+        <div><dt>Kontaktperson</dt><dd>${esc(s.kontaktperson)}</dd></div>
+        <div><dt>E-mail</dt><dd>${esc(s.email)}</dd></div>
+        <div><dt>Telefon</dt><dd>${esc(s.telefon)}</dd></div>
+      </div>
+      <table>
+        <thead><tr><th>Produkt</th><th class="r">Mængde</th></tr></thead>
+        <tbody>${s.linjer.map(l=>`<tr><td>${esc(l.navn)}</td><td class="r">${esc(l.maengde)}</td></tr>`).join("")}</tbody>
+      </table>
+      ${s.besked?`<div style="margin-top:16px"><p style="color:var(--slate);margin:0">Besked</p><p style="margin:4px 0 0">${esc(s.besked)}</p></div>`:""}
+    </div>`:""}
+    <div style="text-align:center;margin-top:32px"><button class="btn-secondary" onclick="go('home')">Tilbage til showroom</button></div>
+  </div>`;
+}
+
+document.getElementById("yr").textContent=new Date().getFullYear();
+render();
+</script>
+</body>
+</html>
